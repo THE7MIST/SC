@@ -1,30 +1,28 @@
-````markdown
-# 1_Snort_Intro.md
-
 # Snort Master Notes (Concepts Only)
 
+> **Rules, installation, configuration, and practical labs are intentionally excluded.**
 
 ---
 
 # Table of Contents
 
-1. What is an IDS?
-2. IDS vs IPS
-3. Types of IDS
-4. Detection Techniques
-5. What is Snort?
-6. Features of Snort
-7. Snort Architecture
-8. Operational Modes
-9. Snort Components
-10. Snort Versions
-11. Snort Rule Sources
-12. Common Threats Detected
-13. Advantages
-14. Limitations
-15. Real-World Deployment
-16. Key Terms
-17. Interview & Exam Quick Revision
+1. [What is an IDS?](#1-what-is-an-ids)
+2. [IDS vs IPS](#2-ids-vs-ips)
+3. [Types of IDS](#3-types-of-ids)
+4. [Detection Techniques](#4-detection-techniques)
+5. [What is Snort?](#5-what-is-snort)
+6. [Features of Snort](#6-features-of-snort)
+7. [Snort Architecture](#7-snort-architecture)
+8. [Operational Modes](#8-operational-modes)
+9. [Snort Components](#9-snort-components)
+10. [Snort Versions](#10-snort-versions)
+11. [Snort Rule Sources](#11-snort-rule-sources)
+12. [Common Threats Detected](#12-common-threats-detected)
+13. [Advantages](#13-advantages)
+14. [Limitations](#14-limitations)
+15. [Real-World Deployment](#15-real-world-deployment)
+16. [Key Terms](#16-key-terms)
+17. [Interview & Exam Quick Revision](#17-interview--exam-quick-revision)
 
 ---
 
@@ -32,7 +30,7 @@
 
 An **Intrusion Detection System (IDS)** is a security solution that continuously monitors network or host activities to detect malicious behavior, policy violations, and cyber attacks.
 
-An IDS **does not stop attacks**. It only **detects**, **logs**, and **alerts** administrators.
+Unlike an IPS, an IDS **does not stop attacks**. It only **detects**, **logs**, and **alerts** administrators.
 
 ## Primary Objectives
 
@@ -46,13 +44,13 @@ An IDS **does not stop attacks**. It only **detects**, **logs**, and **alerts** 
 
 # 2. IDS vs IPS
 
-|          IDS            |             IPS                 |
-|        ------           |            -----                |
-| Detects attacks         | Detects and blocks attacks      |
-| Passive security        | Active security                 |
-| Generates alerts        | Drops/rejects malicious packets |
-| Does not modify traffic | Can block or modify traffic     |
-| Used for monitoring     | Used for prevention             |
+| IDS | IPS |
+|-----|-----|
+| Detects attacks | Detects and blocks attacks |
+| Passive security | Active security |
+| Generates alerts | Drops or rejects malicious packets |
+| Does not modify traffic | Can block or modify traffic |
+| Used for monitoring | Used for prevention |
 
 > **Exam Tip:** Every IPS performs IDS functions, but an IDS cannot prevent attacks.
 
@@ -62,26 +60,26 @@ An IDS **does not stop attacks**. It only **detects**, **logs**, and **alerts** 
 
 ## A. Host-Based IDS (HIDS)
 
-Installed on an individual host or server.
+Installed on an individual computer or server.
 
 ### Monitors
 
 - System logs
 - Running processes
 - File integrity
-- Registry (Windows)
+- Windows Registry
 - User activities
 
 ### Advantages
 
 - Detects insider attacks
-- Monitors decrypted traffic
+- Monitors encrypted traffic after decryption
 - Detailed host visibility
 
 ### Disadvantages
 
-- Protects only one machine
-- Uses host resources
+- Protects only one host
+- Consumes host resources
 - Must be installed on every endpoint
 
 ### Examples
@@ -94,7 +92,7 @@ Installed on an individual host or server.
 
 ## B. Network-Based IDS (NIDS)
 
-Installed at strategic network locations to inspect packets flowing across the network.
+Installed at strategic points in a network to inspect packets flowing between devices.
 
 ### Monitors
 
@@ -107,12 +105,12 @@ Installed at strategic network locations to inspect packets flowing across the n
 
 - Protects multiple hosts
 - Centralized monitoring
-- No endpoint installation
+- No endpoint installation required
 
 ### Disadvantages
 
 - Cannot inspect encrypted payloads
-- High-speed traffic requires powerful hardware
+- Requires powerful hardware for high-speed networks
 
 ### Examples
 
@@ -124,11 +122,11 @@ Installed at strategic network locations to inspect packets flowing across the n
 
 # 4. Detection Techniques
 
-## Signature-Based Detection
+## A. Signature-Based Detection
 
-Matches traffic against known attack signatures.
+Compares network traffic against a database of known attack signatures.
 
-Example
+### Example
 
 ```text
 Known SQL Injection
@@ -145,15 +143,15 @@ Known Malware
 ### Disadvantages
 
 - Cannot detect unknown attacks
-- Requires regular signature updates
+- Requires frequent signature updates
 
 ---
 
-## Anomaly-Based Detection
+## B. Anomaly-Based Detection
 
-Builds a baseline of normal behavior and detects deviations.
+Learns normal network behavior and alerts when unusual activity occurs.
 
-Example
+### Example
 
 ```text
 Normal SSH Logins = 5/day
@@ -166,26 +164,27 @@ Alert Generated
 ### Advantages
 
 - Detects zero-day attacks
-- Finds unknown threats
+- Detects unknown threats
 
 ### Disadvantages
 
-- High false positives
-- Requires learning period
+- Higher false positives
+- Requires a learning period
 
 ---
 
-## Behavior-Based Detection
+## C. Behavior-Based Detection
 
-Detects attacks by analyzing long-term behavior patterns rather than fixed signatures.
+Detects attacks by analyzing long-term behavioral patterns rather than fixed signatures.
 
 ---
 
 # 5. What is Snort?
 
-**Snort** is a free and open-source **Network Intrusion Detection System (NIDS)** that can also function as an **Intrusion Prevention System (IPS)** in inline mode.
+**Snort** is a free and open-source **Network Intrusion Detection System (NIDS)** that can also function as an **Intrusion Prevention System (IPS)** when deployed in **Inline Mode**.
 
-Originally developed by **Martin Roesch** in **1998** and currently maintained by **Cisco Talos**.
+- Developed by **Martin Roesch** in **1998**
+- Currently maintained by **Cisco Talos**
 
 ---
 
@@ -229,20 +228,16 @@ Output Modules
 
 ## Packet Capture
 
-Captures packets from the network interface.
+Responsible for:
 
-Responsibilities
-
-- Receive packets
-- Forward packets to Snort
+- Capturing packets
+- Forwarding packets to Snort
 
 ---
 
 ## Packet Decoder
 
-Decodes network protocols.
-
-Supports
+Recognizes and decodes protocols including:
 
 - Ethernet
 - IPv4
@@ -258,7 +253,7 @@ Supports
 
 Prepare packets before inspection.
 
-Functions
+Functions include:
 
 - TCP Stream Reassembly
 - IP Fragment Reassembly
@@ -272,18 +267,18 @@ Functions
 
 The core of Snort.
 
-Functions
+Responsibilities:
 
 - Compare packets with signatures
 - Analyze protocol fields
-- Inspect payload
+- Inspect packet payloads
 - Generate alerts
 
 ---
 
 ## Output Modules
 
-Responsible for
+Responsible for:
 
 - Alerts
 - Packet logging
@@ -297,21 +292,21 @@ Responsible for
 
 ## 1. Sniffer Mode
 
-Displays packets on screen.
+Displays captured packets on the screen.
 
-Uses
+Uses:
 
 - Troubleshooting
-- Learning networking
 - Packet inspection
+- Learning networking
 
 ---
 
 ## 2. Packet Logger Mode
 
-Stores captured packets into files.
+Stores packets in log files.
 
-Uses
+Uses:
 
 - Traffic analysis
 - Incident investigation
@@ -321,14 +316,14 @@ Uses
 
 ## 3. IDS Mode
 
-Analyzes packets using rules.
+Analyzes packets using predefined rules.
 
-If a rule matches
+If a rule matches:
 
 - Alert generated
 - Event logged
 
-Traffic is **NOT** blocked.
+Traffic is **not blocked**.
 
 ---
 
@@ -336,7 +331,7 @@ Traffic is **NOT** blocked.
 
 Traffic passes through Snort.
 
-If malicious traffic matches
+If malicious traffic matches:
 
 - Packet dropped
 - Packet rejected
@@ -346,13 +341,13 @@ If malicious traffic matches
 
 # 9. Snort Components
 
-| Component        | Function          |
-|-----------       |----------         |
-| Packet Capture   | Captures packets  |
-| Decoder          | Decodes protocols |
-| Preprocessors    | Normalize traffic |
-| Detection Engine | Detects attacks   |
-| Output Modules   | Logs and alerts   |
+| Component | Function |
+|-----------|----------|
+| Packet Capture | Captures packets |
+| Packet Decoder | Decodes protocols |
+| Preprocessors | Normalize traffic |
+| Detection Engine | Detects attacks |
+| Output Modules | Logs and alerts |
 
 ---
 
@@ -362,24 +357,24 @@ If malicious traffic matches
 
 - Legacy version
 - Stable
-- Common in labs
+- Widely used in older labs
 - Uses `snort.conf`
 
 ---
 
 ## Snort 3.x
 
-Current generation.
+Current generation of Snort.
 
-Improvements
+### Improvements
 
 - Multi-threading
 - Better performance
 - Better scalability
-- Plugin architecture
+- Improved plugin architecture
 - Lua configuration (`snort.lua`)
 
-> **Note:** Snort 3.x is recommended for new deployments. Snort 2.x is still widely used for learning and legacy systems.
+> **Note:** Snort 3.x is recommended for new deployments. Snort 2.x is still commonly used in labs and legacy environments.
 
 ---
 
@@ -388,7 +383,7 @@ Improvements
 ## Community Rules
 
 - Free
-- Community maintained
+- Maintained by the Snort community
 
 ## Registered Rules
 
@@ -397,7 +392,7 @@ Improvements
 
 ## Subscriber Rules
 
-- Paid
+- Paid subscription
 - Latest signatures
 
 ## Custom Rules
@@ -420,76 +415,79 @@ Improvements
 - FTP Attacks
 - HTTP Attacks
 - SMB Attacks
-- Worms
+- Worm Activity
 - Command & Control (C2)
 
 ---
 
 # 13. Advantages
 
-- Free & Open Source
+- Free and Open Source
 - Large community
 - Frequently updated rules
 - Highly customizable
 - Lightweight
 - Real-time detection
-- IDS & IPS support
-- SIEM integration
+- Supports IDS and IPS
+- Easy SIEM integration
 
 ---
 
 # 14. Limitations
 
-- Mostly signature-based
-- Requires rule updates
+- Mainly signature-based
+- Requires regular rule updates
 - Limited encrypted traffic inspection
 - False positives if poorly tuned
-- Requires powerful hardware for high-speed networks
+- Requires good hardware for high-speed networks
 
 ---
 
 # 15. Real-World Deployment
 
 ```text
-Internet
-    │
-Firewall
-    │
-Switch
- ├── Servers
- ├── Clients
- └── Snort Sensor
-          │
-          ▼
-     SIEM / SOC
+             Internet
+                 │
+                 ▼
+            Firewall
+                 │
+                 ▼
+              Switch
+        ┌────────┼────────┐
+        │        │        │
+     Servers   Clients  Snort Sensor
+                          │
+                          ▼
+                    SIEM / SOC
 ```
 
-Workflow
+## Workflow
 
-1. Traffic is mirrored to Snort.
+1. Network traffic is mirrored to the Snort sensor.
 2. Snort analyzes packets.
-3. Malicious activity generates alerts.
-4. Events are logged.
-5. Alerts are forwarded to SIEM/SOC.
-6. In IPS mode, malicious traffic is blocked.
+3. If malicious activity is detected:
+   - Alert generated
+   - Event logged
+   - Forwarded to SIEM/SOC
+4. In IPS mode, malicious packets are blocked.
 
 ---
 
 # 16. Key Terms
 
-| Term             | Meaning                                    |
-|------            |---------                                   |
-| IDS              | Intrusion Detection System                 | 
-| IPS              | Intrusion Prevention System                |
-| HIDS             | Host-Based IDS                             |
-| NIDS             | Network-Based IDS                          |
-| DPI              | Deep Packet Inspection                     |
-| Signature        | Pattern of a known attack                  |
-| Alert            | Notification generated by Snort            |
-| Packet           |       Unit of network data                 |
-| Preprocessor     | Normalizes packets before inspection       |
-| Detection Engine | Matches traffic against signatures         |
-| SIEM             |  Security Information and Event Management |
+| Term | Meaning |
+|------|---------|
+| IDS | Intrusion Detection System |
+| IPS | Intrusion Prevention System |
+| HIDS | Host-Based Intrusion Detection System |
+| NIDS | Network-Based Intrusion Detection System |
+| DPI | Deep Packet Inspection |
+| Signature | Pattern used to identify a known attack |
+| Alert | Notification generated by Snort |
+| Packet | Basic unit of network communication |
+| Preprocessor | Normalizes packets before inspection |
+| Detection Engine | Matches traffic against signatures |
+| SIEM | Security Information and Event Management |
 
 ---
 
@@ -497,13 +495,13 @@ Workflow
 
 - IDS detects and alerts.
 - IPS detects and blocks.
-- HIDS protects a host.
-- NIDS protects a network.
+- HIDS protects a single host.
+- NIDS protects an entire network.
 - Snort is an open-source NIDS/IPS.
 - Maintained by Cisco Talos.
-- Snort architecture:
+- Snort Architecture:
   - Packet Capture
-  - Decoder
+  - Packet Decoder
   - Preprocessors
   - Detection Engine
   - Output Modules
@@ -512,9 +510,9 @@ Workflow
   - Packet Logger
   - IDS
   - IPS (Inline)
-- Snort 3.x is the current recommended version.
+- Snort 3.x is the recommended version.
 - Snort primarily uses signature-based detection.
 
 ---
+
 **End of Chapter 1**
-````
