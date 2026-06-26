@@ -46,13 +46,13 @@ An IDS **does not stop attacks**. It only **detects**, **logs**, and **alerts** 
 
 # 2. IDS vs IPS
 
-| IDS | IPS |
-|------|-----|
-| Detects attacks | Detects and blocks attacks |
-| Passive security | Active security |
-| Generates alerts | Drops/rejects malicious packets |
-| Does not modify traffic | Can block or modify traffic |
-| Used for monitoring | Used for prevention |
+|          IDS            |             IPS                 |
+|        ------           |            -----                |
+| Detects attacks         | Detects and blocks attacks      |
+| Passive security        | Active security                 |
+| Generates alerts        | Drops/rejects malicious packets |
+| Does not modify traffic | Can block or modify traffic     |
+| Used for monitoring     | Used for prevention             |
 
 > **Exam Tip:** Every IPS performs IDS functions, but an IDS cannot prevent attacks.
 
