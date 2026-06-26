@@ -3,7 +3,6 @@
 
 # Snort Master Notes (Concepts Only)
 
-> **Rules, installation, configuration, and practical labs are intentionally excluded.**
 
 ---
 
